@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Radar plot documenting differences in attributes across music genres</title>
+
+    <!-- Google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <script src="drop_down.js"></script>
+    <!-- D3.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 300;
+            fill: #242424;
+            text-align: center;
+            text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+            cursor: default;
+        }
+
+        .legend {
+            font-family: 'Raleway', sans-serif;
+            fill: #333333;
+            text-align: left;
+            padding-left: 20px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .legend-item {
+            margin-bottom: 5px;
+        }
+
+        .legend-color {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 15px;
+        }
+
+        /* Tooltip style */
+        #tooltip {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ccc;
+            padding: 5px;
+            border-radius: 5px;
+            pointer-events: none; /* So tooltip doesn't interfere with mouse events */
+            display: none; /* Initially hidden */
+        }
+
+        /* Title style */
+        #title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        input[type=text] {
+            width: 50px; /* Initial width */
+            height: 20px; /* Adjust height as needed */
+            -webkit-transition: width 0.4s ease-in-out;
+            transition: width 0.4s ease-in-out;
+            max-width: 200px; /* Maximum width */
+        }
+
+        /* When the input field gets focus, change its width to 100% */
+        input[type=text]:focus {
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="title">Radar plot documenting differences in attributes across music genres</div>
+<div id="dropdown-container">
+    <select id="d3-dropdown" class="dropdown" data-target="dropdown-selected.html">
+      <option value="Button1" data-target="term1.html" class="dropdown-option">Categories Based on Different Attributes</option>
+      <option value="Button2" data-target="new_genres.html" class="dropdown-option">Track Genres (Revamped)</option>
+      <option value="Button3" data-target="artists.html" class="dropdown-option">Artist Attributes </option>
+      <option value="Button4" data-target="all_year.html" class="dropdown-option">Attributes Per Year </option>
+      <option value="Button5" data-target="search_area.html" class="dropdown-option">Attribute area Highlighter</option>
+      <option value="Button6" data-target="search_stroke.html" class="dropdown-option">Attribute line Highlighter</option>
+
+    </select>
+    <p id="selected-dropdown"></p>
+    
+
+<!-- Search box -->
+<input type="text" id="search" placeholder="Search.." onkeyup="searchFunction()">
+
+<div class="radarChart"></div>
+<div class="legend" id="legend"></div>
+
+<!-- Tooltip element -->
+<div id="tooltip"></div>
+
+<!-- Reset button -->
+<button onclick="resetPage()">Reset Page</button>
+
+<script src="radarChart.js"></script>
+<script>
+    function printNumber() {
+        console.log(5);
+    }
+</script>
+<script>
+    function myFunction(checkbox) {
+        var checkBoxes = document.querySelectorAll('.checkbox');
+        checkBoxes.forEach(function(cb) {
+            // Uncheck all checkboxes except the clicked one
+            if (cb !== checkbox) {
+                cb.checked = false;
+            }
+        });
+
+        // Retrieve the year associated with the checkbox
+        var year = checkbox.parentElement.textContent.trim();
+        var radarAreas = document.querySelectorAll('.radarArea');
+        var legendColor = checkbox.parentElement.querySelector('.legend-color').style.backgroundColor;
+
+        // Highlight or unhighlight the radar area based on the checkbox status
+        radarAreas.forEach(function(area) {
+            if (area.getAttribute('data-year') === year) {
+                area.style.fill = checkbox.checked ? legendColor : 'none';
+                area.style.fillOpacity = checkbox.checked ? 0.8 : 0.3; // Increase opacity when checked
+            } else {
+                area.style.fill = 'none';
+            }
+        });
+
+        // Display year name when checkbox is clicked
+        var yearDisplay = document.getElementById('year-display');
+        yearDisplay.textContent = checkbox.checked ? "Year: " + year : "";
+    }
+</script>
+<script>
+    var margin = {top: 100, right: 100, bottom: 100, left: 100},
+        width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+        height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+    //////////////////////////////////////////////////////////////
+
+// Load data from year.csv
+d3.csv("final_dataframe.csv", function (data) {
+    // Group data by year and calculate average values
+    var groupedData = d3.nest()
+        .key(function(d) { return d.year; })
+        .rollup(function(v) {
+            return {
+                danceability: d3.mean(v, function(d) { return parseFloat(d.danceability); }),
+                liveness: d3.mean(v, function(d) { return parseFloat(d.liveness); }),
+                energy: d3.mean(v, function(d) { return parseFloat(d.energy); }),
+                speechiness: d3.mean(v, function(d) { return parseFloat(d.speechiness); }),
+                instrumentalness: d3.mean(v, function(d) { return parseFloat(d.instrumentalness); }),
+                valence: d3.mean(v, function(d) { return parseFloat(d.valence); })
+            };
+        })
+        .entries(data);
+
+    // Format data for radar chart
+    var formattedData = groupedData.map(function(group) {
+        return Object.keys(group.values).map(function(key) {
+            return { axis: key.charAt(0).toUpperCase() + key.slice(1), value: group.values[key] };
+        });
+    });
+
+    // Output the formatted data array to the console
+    console.log(groupedData);
+    console.log(formattedData);
+
+    //////////////////////////////////////////////////////////////
+    ////////////////////// Draw the Chart //////////////////////////
+    //////////////////////////////////////////////////////////////
+
+    var color = d3.scale.category10(); // Unique color scale for each year
+
+    //function developed by Nadieh Bremer
+    var radarChartOptions = {
+        w: width,
+        h: height,
+        margin: margin,
+        maxValue: 0.7, // Change maxValue to 1
+        levels: 5,
+        roundStrokes: true,
+        color: color
+    };
+    // Calls function to draw the Radar chart
+    RadarChart(".radarChart", formattedData, radarChartOptions);
+        // Add legend
+var legend = d3.select("#legend");
+var uniqueYears = groupedData.map(function(d) { return d.key; });
+
+// Calculate number of columns needed and maximum number of items per column
+var numColumns = 5; // Number of columns
+var maxItemsPerColumn = Math.ceil(uniqueYears.length / numColumns);
+
+// Create legend items for each year
+var legendColumns = legend.selectAll(".legend-column")
+    .data(d3.range(numColumns))
+    .enter().append("div")
+    .attr("class", "legend-column")
+    .style("float", "left") // Arrange columns horizontally
+    .style("width", "25%"); // Set width for each column (adjust as needed)
+
+legendColumns.selectAll(".legend-item")
+    .data(function(d, i) {
+        // Return data for each column
+        return uniqueYears.slice(i * maxItemsPerColumn, (i + 1) * maxItemsPerColumn);
+    })
+    .enter().append("div")
+    .attr("class", "legend-item")
+    .style("margin-bottom", "5px"); // Add some margin between legend items
+
+legendColumns.selectAll(".legend-item")
+    .append("div")
+    .attr("class", "legend-color")
+    .style("background-color", function(d, i) { return color(i); });
+
+legendColumns.selectAll(".legend-item")
+    .append("span")
+    .text(function(d) { return d; });
+
+// Add checkboxes
+legendColumns.selectAll(".legend-item")
+    .append("input")
+    .attr("type", "checkbox")
+    .attr("class", "checkbox")
+    .on("change", function() {
+        myFunction(this);
+    });
+
+// Clear float after legend columns
+legend.append("div")
+    .style("clear", "both");
+
+
+        var radarAreas = document.querySelectorAll('.radarArea');
+        radarAreas.forEach(function(area, index) {
+            area.setAttribute('data-year', groupedData[index].key); // Associate year name with each area
+            area.addEventListener('mouseover', function() {
+                // Retrieve year name
+                var year = this.getAttribute('data-year');
+                console.log("Year: " + year);
+
+                var yearDisplay = document.getElementById('year-display');
+                yearDisplay.textContent = "Year: " + year;
+                yearDisplay.style.display = "block"; // Show year display
+            });
+
+            area.addEventListener('mouseout', function() {
+                // Hide year display when mouse leaves the area
+                var yearDisplay = document.getElementById('year-display');
+                yearDisplay.style.display = "none";
+            });
+        });
+    });
+</script>
+
+<!-- Display year at the top of the page -->
+<div id="year-display" style="display: none; position: absolute; top: 120px; left: 50%; transform: translateX(-50%);"></div>
+
+<script>
+    function resetPage() {
+        location.reload();
+    }
+
+    function searchFunction() {
+    var input, filter, radarAreas, txtValue;
+    input = document.getElementById('search');
+    filter = input.value.toUpperCase();
+
+    // Check if the filter matches any songs in the dataset
+    var matchingSong = dataset.find(function(song) {
+        return song.name.toUpperCase() === filter;
+    });
+
+    if (matchingSong) {
+        // Create a radar chart for the matching song
+        createRadarChartForSong(matchingSong);
+    } else {
+        // If no match found, proceed with the previous behavior
+        radarAreas = document.querySelectorAll('.radarArea');
+        radarAreas.forEach(function(area) {
+            txtValue = area.getAttribute('data-year');
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                area.style.display = "";
+                area.style.fillOpacity = 0.8; // Increase opacity for matching areas
+            } else {
+                area.style.display = "none";
+            }
+        });
+    }
+}
+
+function createRadarChartForSong(song) {
+    // Clear any existing radar chart
+    d3.select(".radarChart").selectAll("*").remove();
+
+    // Create data array for radar chart
+    var data = [
+        { axis: "Danceability", value: song.danceability },
+        { axis: "Liveness", value: song.liveness },
+        { axis: "Energy", value: song.energy },
+        { axis: "Speechiness", value: song.speechiness },
+        { axis: "Instrumentalness", value: song.instrumentalness },
+        { axis: "Valence", value: song.valence }
+    ];
+
+    // Customize radar chart options as needed
+    var radarChartOptions = {
+        w: 500,
+        h: 500,
+        margin: { top: 100, right: 100, bottom: 100, left: 100 },
+        maxValue: 1, // Maximum value for the radar chart
+        levels: 5,
+        roundStrokes: true,
+        color: d3.scale.category10() // Unique color scale for each year
+    };
+
+    // Draw the radar chart
+    RadarChart(".radarChart", [data], radarChartOptions);
+}
+function searchFunction() {
+    var input, filter, radarAreas, txtValue;
+    input = document.getElementById('search');
+    filter = input.value.toUpperCase();
+    radarAreas = document.querySelectorAll('.radarArea');
+
+    // Hide all other radar areas and strokes
+    d3.selectAll('.radarArea').style('display', 'none');
+    d3.selectAll('.radarStroke').style('display', 'none');
+
+    radarAreas.forEach(function(area) {
+        txtValue = area.getAttribute('data-year');
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            area.style.display = "";
+            area.style.fillOpacity = 0.8; // Increase opacity for matching areas
+
+            // Show the corresponding stroke
+            var correspondingStroke = document.querySelector('.radarStroke[data-year="' + txtValue + '"]');
+            if (correspondingStroke) {
+                correspondingStroke.style.display = "";
+            }
+        } else {
+            area.style.display = "none";
+        }
+    });
+}
+
+    
+</script>
+
+</body>
+</html>

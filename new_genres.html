@@ -7,7 +7,7 @@
     <!-- Google fonts -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
-
+    <script src="drop_down.js"></script>
     <!-- D3.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
     <style>
@@ -78,6 +78,21 @@
 <body>
 
 <div id="title">Radar plot documenting differences in attributes across music genres</div>
+<div id="dropdown-container">
+    <select id="d3-dropdown" class="dropdown" data-target="dropdown-selected.html">
+      <option value="Button1" data-target="term1.html" class="dropdown-option">Categories Based on Different Attributes</option>
+      <option value="Button2" data-target="new_genres.html" class="dropdown-option">Track Genres (Revamped)</option>
+      <option value="Button3" data-target="artists.html" class="dropdown-option">Artist Attributes </option>
+      <option value="Button4" data-target="all_year.html" class="dropdown-option">Attributes Per Year </option>
+      <option value="Button5" data-target="search_area.html" class="dropdown-option">Attribute area Highlighter</option>
+      <option value="Button6" data-target="search_stroke.html" class="dropdown-option">Attribute line Highlighter</option>
+
+    </select>
+    <p id="selected-dropdown"></p>
+    
+
+<!-- Search box -->
+<input type="text" id="search" placeholder="Search.." onkeyup="searchFunction()">
 
 <div class="radarChart"></div>
 <div class="legend" id="legend"></div>
@@ -131,10 +146,10 @@
     //////////////////////////////////////////////////////////////
 
 // Load data from genre.csv
-d3.csv("genres.csv", function (data) {
+d3.csv("final_dataframe.csv", function (data) {
     // Group data by genre and calculate average values
     var groupedData = d3.nest()
-        .key(function(d) { return d.genre; })
+        .key(function(d) { return d.track_genre; })
         .rollup(function(v) {
             return {
                 danceability: d3.mean(v, function(d) { return parseFloat(d.danceability); }),
@@ -177,42 +192,51 @@ d3.csv("genres.csv", function (data) {
     // Calls function to draw the Radar chart
     RadarChart(".radarChart", formattedData, radarChartOptions);
         // Add legend
-        var legend = d3.select("#legend");
-        var uniqueGenres = groupedData.map(function(d) { return d.key; });
-        var legendItems = legend.selectAll(".legend-item")
-            .data(uniqueGenres)
-            .enter().append("div")
-            .attr("class", "legend-item");
+var legend = d3.select("#legend");
+var uniqueGenres = groupedData.map(function(d) { return d.key; });
 
-        legendItems.append("div")
-            .attr("class", "legend-color")
-            .style("background-color", function(d, i) { return color(i); });
+// Calculate number of columns needed and maximum number of items per column
+var numColumns = 3; // Number of columns
+var maxItemsPerColumn = Math.ceil(uniqueGenres.length / numColumns);
 
-        legendItems.append("span")
-            .text(function(d) { return d; });
+// Create legend items for each genre
+var legendColumns = legend.selectAll(".legend-column")
+    .data(d3.range(numColumns))
+    .enter().append("div")
+    .attr("class", "legend-column")
+    .style("float", "left") // Arrange columns horizontally
+    .style("width", "25%"); // Set width for each column (adjust as needed)
 
-        // Add checkboxes
-        legendItems.append("input")
-            .attr("type", "checkbox")
-            .attr("class", "checkbox")
-            .on("change", function() {
-                myFunction(this);
-            });
+legendColumns.selectAll(".legend-item")
+    .data(function(d, i) {
+        // Return data for each column
+        return uniqueGenres.slice(i * maxItemsPerColumn, (i + 1) * maxItemsPerColumn);
+    })
+    .enter().append("div")
+    .attr("class", "legend-item")
+    .style("margin-bottom", "5px"); // Add some margin between legend items
 
-        // Adds event listener to legend items
-        legendItems.on("click", function(selectedGenre) {
-            // Filters the radar chart data based on the selected genre
-            var filteredData = formattedData.filter(function(d) {
-                return d[0].axis === selectedGenre;
-            });
+legendColumns.selectAll(".legend-item")
+    .append("div")
+    .attr("class", "legend-color")
+    .style("background-color", function(d, i) { return color(i); });
 
-            // Calls function to draw the Radar chart with the filtered data
-            RadarChart(".radarChart", filteredData, radarChartOptions);
+legendColumns.selectAll(".legend-item")
+    .append("span")
+    .text(function(d) { return d; });
 
-            // Highlights the selected legend item
-            legendItems.style("opacity", 0.1); // Dim all legend items
-            d3.select(this).style("opacity", 0.9); // Highlight the selected legend item
-        });
+// Add checkboxes
+legendColumns.selectAll(".legend-item")
+    .append("input")
+    .attr("type", "checkbox")
+    .attr("class", "checkbox")
+    .on("change", function() {
+        myFunction(this);
+    });
+
+// Clear float after legend columns
+legend.append("div")
+    .style("clear", "both");
 
 
         var radarAreas = document.querySelectorAll('.radarArea');
@@ -244,6 +268,91 @@ d3.csv("genres.csv", function (data) {
     function resetPage() {
         location.reload();
     }
+
+    function searchFunction() {
+    var input, filter, radarAreas, txtValue;
+    input = document.getElementById('search');
+    filter = input.value.toUpperCase();
+
+    // Check if the filter matches any songs in the dataset
+    var matchingSong = dataset.find(function(song) {
+        return song.name.toUpperCase() === filter;
+    });
+
+    if (matchingSong) {
+        // Create a radar chart for the matching song
+        createRadarChartForSong(matchingSong);
+    } else {
+        // If no match found, proceed with the previous behavior
+        radarAreas = document.querySelectorAll('.radarArea');
+        radarAreas.forEach(function(area) {
+            txtValue = area.getAttribute('data-genre');
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                area.style.display = "";
+                area.style.fillOpacity = 0.8; // Increase opacity for matching areas
+            } else {
+                area.style.display = "none";
+            }
+        });
+    }
+}
+
+function createRadarChartForSong(song) {
+    // Clear any existing radar chart
+    d3.select(".radarChart").selectAll("*").remove();
+
+    // Create data array for radar chart
+    var data = [
+        { axis: "Danceability", value: song.danceability },
+        { axis: "Liveness", value: song.liveness },
+        { axis: "Energy", value: song.energy },
+        { axis: "Speechiness", value: song.speechiness },
+        { axis: "Instrumentalness", value: song.instrumentalness },
+        { axis: "Valence", value: song.valence }
+    ];
+
+    // Customize radar chart options as needed
+    var radarChartOptions = {
+        w: 500,
+        h: 500,
+        margin: { top: 100, right: 100, bottom: 100, left: 100 },
+        maxValue: 1, // Maximum value for the radar chart
+        levels: 5,
+        roundStrokes: true,
+        color: d3.scale.category10() // Unique color scale for each genre
+    };
+
+    // Draw the radar chart
+    RadarChart(".radarChart", [data], radarChartOptions);
+}
+function searchFunction() {
+    var input, filter, radarAreas, txtValue;
+    input = document.getElementById('search');
+    filter = input.value.toUpperCase();
+    radarAreas = document.querySelectorAll('.radarArea');
+
+    // Hide all other radar areas and strokes
+    d3.selectAll('.radarArea').style('display', 'none');
+    d3.selectAll('.radarStroke').style('display', 'none');
+
+    radarAreas.forEach(function(area) {
+        txtValue = area.getAttribute('data-genre');
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            area.style.display = "";
+            area.style.fillOpacity = 0.8; // Increase opacity for matching areas
+
+            // Show the corresponding stroke
+            var correspondingStroke = document.querySelector('.radarStroke[data-genre="' + txtValue + '"]');
+            if (correspondingStroke) {
+                correspondingStroke.style.display = "";
+            }
+        } else {
+            area.style.display = "none";
+        }
+    });
+}
+
+    
 </script>
 
 </body>

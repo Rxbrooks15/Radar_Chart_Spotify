@@ -7,7 +7,7 @@
     <!-- Google fonts -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
-
+    <script src="drop_down.js"></script>
     <!-- D3.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
     <style>
@@ -78,6 +78,21 @@
 <body>
 
 <div id="title">Radar plot documenting differences in attributes across music genres</div>
+<div id="dropdown-container">
+    <select id="d3-dropdown" class="dropdown" data-target="dropdown-selected.html">
+      <option value="Button1" data-target="term1.html" class="dropdown-option">Categories Based on Different Attributes</option>
+      <option value="Button2" data-target="new_genres.html" class="dropdown-option">Track Genres (Revamped)</option>
+      <option value="Button3" data-target="artists.html" class="dropdown-option">Artist Attributes </option>
+      <option value="Button4" data-target="all_year.html" class="dropdown-option">Attributes Per Year </option>
+      <option value="Button5" data-target="search_area.html" class="dropdown-option">Attribute area Highlighter</option>
+      <option value="Button6" data-target="search_stroke.html" class="dropdown-option">Attribute line Highlighter</option>
+
+    </select>
+    <p id="selected-dropdown"></p>
+    
+
+<!-- Search box -->
+<input type="text" id="search" placeholder="Search.." onkeyup="searchFunction()">
 
 <div class="radarChart"></div>
 <div class="legend" id="legend"></div>
@@ -244,6 +259,79 @@ d3.csv("genres.csv", function (data) {
     function resetPage() {
         location.reload();
     }
+
+    function searchFunction() {
+    var input, filter, radarAreas, txtValue;
+    input = document.getElementById('search');
+    filter = input.value.toUpperCase();
+
+    // Check if the filter matches any songs in the dataset
+    var matchingSong = dataset.find(function(song) {
+        return song.name.toUpperCase() === filter;
+    });
+
+    if (matchingSong) {
+        // Create a radar chart for the matching song
+        createRadarChartForSong(matchingSong);
+    } else {
+        // If no match found, proceed with the previous behavior
+        radarAreas = document.querySelectorAll('.radarArea');
+        radarAreas.forEach(function(area) {
+            txtValue = area.getAttribute('data-genre');
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                area.style.display = "";
+                area.style.fillOpacity = 0.8; // Increase opacity for matching areas
+            } else {
+                area.style.display = "none";
+            }
+        });
+    }
+}
+
+function createRadarChartForSong(song) {
+    // Clear any existing radar chart
+    d3.select(".radarChart").selectAll("*").remove();
+
+    // Create data array for radar chart
+    var data = [
+        { axis: "Danceability", value: song.danceability },
+        { axis: "Liveness", value: song.liveness },
+        { axis: "Energy", value: song.energy },
+        { axis: "Speechiness", value: song.speechiness },
+        { axis: "Instrumentalness", value: song.instrumentalness },
+        { axis: "Valence", value: song.valence }
+    ];
+
+    // Customize radar chart options as needed
+    var radarChartOptions = {
+        w: 500,
+        h: 500,
+        margin: { top: 100, right: 100, bottom: 100, left: 100 },
+        maxValue: 1, // Maximum value for the radar chart
+        levels: 5,
+        roundStrokes: true,
+        color: d3.scale.category10() // Unique color scale for each genre
+    };
+
+    // Draw the radar chart
+    RadarChart(".radarChart", [data], radarChartOptions);
+}
+    function searchFunction() {
+    var input, filter, radarAreas, txtValue;
+    input = document.getElementById('search');
+    filter = input.value.toUpperCase();
+    radarAreas = document.querySelectorAll('.radarArea');
+    radarAreas.forEach(function(area) {
+        txtValue = area.getAttribute('data-genre');
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            area.style.display = "";
+            area.style.fillOpacity = 0.8; // Increase opacity for matching areas
+        } else {
+            area.style.display = "none";
+        }
+    });
+}
+    
 </script>
 
 </body>
