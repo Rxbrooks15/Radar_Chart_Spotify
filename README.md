@@ -12,7 +12,9 @@ My endeavor culminated in the creation of a Radar or Spider plot, strategically 
 Departing from my customary approach of simplistic geometries, I ventured into uncharted territories, pushing the boundaries of complexity. The Radar chart, with its intricate axes and angular subtleties, posed a formidable challenge. In pursuit of a comprehensive narrative, I delved into various musical attributes such as danceability, energy, and liveness, among others.
 
 The visualization unfolded as smoothed area charts, meticulously plotted across six radial values, each representing a distinct attribute, set against a circular backdrop. This ![Screenshot (453)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/3af9838a-dadb-4308-a873-a6927967a26f)
-![Screenshot (449)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/c5bdcef9-b821-4e3f-9b09-992e61867a69)
+
+![Screenshot (449)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/f329beaa-afbd-441f-b0fd-4bc6391af837)
+
 ![Screenshot (444)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/aabd151e-ba80-4373-91e6-2912c68034bd)
 ![Screenshot (440)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/d43260dc-84b2-427c-b34b-a14e9157e36c)
 methodical approach aimed to elucidate underlying patterns and disparities across different genres.
