@@ -7,7 +7,7 @@ D3.js radar/spider plot documenting 6 aspects of music (danceability, liveness, 
 
 https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/4c1773a6-2efe-4cc5-8bfd-2af4af2a099b
 
-
+![Screenshot (440)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/d43260dc-84b2-427c-b34b-a14e9157e36c)
 Note: Page load time for chart calculating attributes based on artist names takes longer than usual to load the page 
 
 Features::
@@ -33,7 +33,7 @@ https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/958a5b81-d9c6
 
 
 ![Screenshot (444)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/aabd151e-ba80-4373-91e6-2912c68034bd)
-![Screenshot (440)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/d43260dc-84b2-427c-b34b-a14e9157e36c)
+
 The visualization unfolded as smoothed area charts, meticulously plotted across six radial values, each representing a distinct attribute, set against a circular backdrop. Thismethodical approach aimed to elucidate underlying patterns and disparities across different genres.
 
 My curiosity drove me to discern any discernible similarities or disparities among genres, and the outcome surpassed expectations. The highlight feature, in particular, accentuated salient aspects of the chart, elevating its visual impact. Challenges I faced include getting the searchbox to work, highlighting data based on the checkbox and ordering the dropbox as on one of the charts, it was impossible to select categories due to the lag.
