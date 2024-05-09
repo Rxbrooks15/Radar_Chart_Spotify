@@ -2,6 +2,7 @@
 
 D3.js radar/spider plot documenting 6 aspects of music (danceability, liveness, energy,etc) . There are hover funtionalities and highlighting features. The main characteristic of this data is explaining as much of the data in one instance as possible. This is where the hover features come handy in order to classify the data.
 
+![Screenshot (449)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/f329beaa-afbd-441f-b0fd-4bc6391af837)
 
 
 https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/4c1773a6-2efe-4cc5-8bfd-2af4af2a099b
@@ -30,7 +31,6 @@ My endeavor culminated in the creation of a Radar or Spider plot, strategically 
 https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/958a5b81-d9c6-493b-9944-31f952a5e550
  Departing from my customary approach of simplistic geometries, I ventured into uncharted territories, pushing the boundaries of complexity. The Radar chart, with its intricate axes and angular subtleties, posed a formidable challenge. In pursuit of a comprehensive narrative, I delved into various musical attributes such as danceability, energy, and liveness, among others.
 
-![Screenshot (449)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/f329beaa-afbd-441f-b0fd-4bc6391af837)
 
 ![Screenshot (444)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/aabd151e-ba80-4373-91e6-2912c68034bd)
 ![Screenshot (440)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/d43260dc-84b2-427c-b34b-a14e9157e36c)
