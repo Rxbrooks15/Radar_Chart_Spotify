@@ -12,12 +12,18 @@ Searchbox: Usersa are able to type artist names, years, or genres which will hig
 Checkbox: Used to select specific variables of interest on the legend 
 Reset button: Resets page
 
+
+https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/6c532beb-01b6-4432-9227-ece181bfdfd7
+
+
 Delving into the realm of data visualization within the domain of modern music genres, I embarked on a project leveraging Spotify's dataset sourced from Kaggle. I was looking to craft a visualization that would encapsulate intricate narratives embedded within the data.
 
 My endeavor culminated in the creation of a Radar or Spider plot, strategically designed to unravel nuanced insights from the dataset. However, the journey to manifest this visualization was riddled with challenges, particularly in implementing interactive features—an aspect I deemed paramount for user engagement.
 
 
- ![Screenshot (453)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/3af9838a-dadb-4308-a873-a6927967a26f)
+
+
+https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/958a5b81-d9c6-493b-9944-31f952a5e550
  Departing from my customary approach of simplistic geometries, I ventured into uncharted territories, pushing the boundaries of complexity. The Radar chart, with its intricate axes and angular subtleties, posed a formidable challenge. In pursuit of a comprehensive narrative, I delved into various musical attributes such as danceability, energy, and liveness, among others.
 
 ![Screenshot (449)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/f329beaa-afbd-441f-b0fd-4bc6391af837)
