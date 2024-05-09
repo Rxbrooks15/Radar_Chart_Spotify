@@ -3,6 +3,10 @@
 D3.js radar/spider plot documenting 6 aspects of music (danceability, liveness, energy,etc) . There are hover funtionalities and highlighting features. The main characteristic of this data is explaining as much of the data in one instance as possible. This is where the hover features come handy in order to classify the data.
 
 
+
+https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/4c1773a6-2efe-4cc5-8bfd-2af4af2a099b
+
+
 Note: Page load time for chart calculating attributes based on artist names takes longer than usual to load the page 
 
 Features::
