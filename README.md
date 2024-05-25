@@ -44,6 +44,7 @@ https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/b1371164-f427
 
 
 https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/958a5b81-d9c6-493b-9944-31f952a5e550
+
  Departing from my customary approach of simplistic geometries, I ventured into uncharted territories, pushing the boundaries of complexity. The Radar chart, with its intricate axes and angular subtleties, posed a formidable challenge. In pursuit of a comprehensive narrative, I delved into various musical attributes such as danceability, energy, and liveness, among others.
 
 
