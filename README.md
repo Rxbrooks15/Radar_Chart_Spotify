@@ -28,6 +28,10 @@ My endeavor culminated in the creation of a Radar or Spider plot, strategically 
 
 
 
+https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/4bda2d40-10c4-4f1e-bba4-b815b26cdf39
+
+
+
 https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/b1371164-f427-47dc-a4c4-6fc7e54c212d
 
 
