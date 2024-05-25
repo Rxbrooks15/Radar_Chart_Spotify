@@ -5,7 +5,11 @@ D3.js radar/spider plot documenting 6 aspects of music (danceability, liveness, 
 ![Screenshot (449)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/f329beaa-afbd-441f-b0fd-4bc6391af837)
 
 
-https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/4c1773a6-2efe-4cc5-8bfd-2af4af2a099b
+
+https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/b7163b73-2c73-4f45-b904-3ad84cbc48cb
+
+
+
 
 ![Screenshot (440)](https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/d43260dc-84b2-427c-b34b-a14e9157e36c)
 Note: Page load time for chart calculating attributes based on artist names takes longer than usual to load the page 
