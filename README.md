@@ -18,7 +18,11 @@ Checkbox: Used to select specific variables of interest on the legend
 Reset button: Resets page
 
 
-https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/6c532beb-01b6-4432-9227-ece181bfdfd7
+
+
+
+
+https://github.com/Rxbrooks15/Radar_Chart_Spotify/assets/112977778/41a000a7-d8af-4621-b4c3-e62ce27a7483
 
 
 Delving into the realm of data visualization within the domain of modern music genres, I embarked on a project leveraging Spotify's dataset sourced from Kaggle. I was looking to craft a visualization that would encapsulate intricate narratives embedded within the data.
